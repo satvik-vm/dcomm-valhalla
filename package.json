@@ -1,0 +1,27 @@
+{
+  "name": "valhalla",
+  "version": "1.0.0",
+  "description": "This is the official repo for dcomm valhalla hackathon for team lucifer.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "start-nodemon": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/satvik-vm/dcomm-valhalla.git"
+  },
+  "author": "satvik",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/satvik-vm/dcomm-valhalla/issues"
+  },
+  "homepage": "https://github.com/satvik-vm/dcomm-valhalla#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^6.9.0",
+    "react-native": "^0.71.2",
+    "web3": "^1.8.2"
+  }
+}
