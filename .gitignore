@@ -1,1 +1,14 @@
 node_modules
+.env
+coverage
+coverage.json
+typechain
+typechain-types
+
+# Hardhat files
+block_end/cache
+block_end/artifacts
+block_end/node_modules
+block_end/.gitignore
+block_end/.env
+
