@@ -5,21 +5,24 @@ const account = require("../models/accounts");
 const ErrResponse = require("../utils/errResponse");
 
 exports.signup_function = async (req, res) => {
-    const {name, phone_number, password, pincode, dob} = req.body;
+    const {_name, phone_number, password, pincode, dob} = req.body;
+    console.log(req.body);
 
     const account_number = "0x000"; //TODO: implement a method to get accunt number from block
+    console.log(account_number);
 
     try{
-        const signed_up = new signup.create({
+        const signed_up = await signup.create({
             account_number,
-            name,
+            _name,
             phone_number,
             password,
             pincode,
             dob
         });
-        const account_created = new account.create({
-            account_number,
+        const main_account = account_number;
+        const account_created = await account.create({
+            main_account,
         });
         console.log(signed_up);
         console.log(account_created);
@@ -29,10 +32,11 @@ exports.signup_function = async (req, res) => {
             message: 'User created'
         });
     } catch(error){
+        console.log(error);
         res.status(500).json({
             ok: false,
             message: 'Cannot create user'
-        })
+        });
     }
 };
 

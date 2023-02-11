@@ -4,6 +4,9 @@ coverage
 coverage.json
 typechain
 typechain-types
+front_end
+front_end_test
+front_end_test_2
 
 # Hardhat files
 block_end/cache

@@ -4,6 +4,7 @@ const express = require("express");
 const connectDB = require("./config/db");
 const errorHandler = require("./middleware/error");
 const cors = require("cors");
+const prompt = require("prompt-sync")();
 
 const app = express();
 

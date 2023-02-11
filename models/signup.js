@@ -8,19 +8,19 @@ const signupSchema = new mongoose.Schema({
         unique: true
     },
 
-    __name: {
+    _name: {
         type: String,
         required: [true]
     },
 
     phone_number: {
-        type: Number,
+        type: String,
         required: [true],
         unique: true,
-        validate : {
-            validator : Number.isInteger,
-            message   : '{VALUE} is not an integer value'
-        },
+        // validate : {
+        //     validator : Number.isInteger,
+        //     message   : '{VALUE} is not an integer value'
+        // },
     },
 
     password: {
@@ -29,16 +29,16 @@ const signupSchema = new mongoose.Schema({
     },
 
     pincode: {
-        type: Number,
+        type: String,
         required: [true],
-        validate : {
-            validator : Number.isInteger,
-            message   : '{VALUE} is not an integer value'
-        },
+        // validate : {
+        //     validator : Number.isInteger,
+        //     message   : '{VALUE} is not an integer value'
+        // },
     },
 
     dob: {
-        type: Date,
+        type: String,
         required: [true]
     }
 });
