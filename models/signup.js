@@ -16,11 +16,16 @@ const signupSchema = new mongoose.Schema({
     phone_number: {
         type: String,
         required: [true],
-        unique: true,
+        // unique: true,
         // validate : {
         //     validator : Number.isInteger,
         //     message   : '{VALUE} is not an integer value'
         // },
+    },
+
+    email: {
+        type: String,
+        required: [true],
     },
 
     password: {
