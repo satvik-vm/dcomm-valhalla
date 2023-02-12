@@ -1,14 +1,17 @@
 // const login = require("../models/login");
 const signup = require("../models/signup");
 const account = require("../models/accounts");
-
+const deploy = require("../scripts/deploy");
 const ErrResponse = require("../utils/errResponse");
 
 exports.signup_function = async (req, res) => {
     const {_name, phone_number, password, pincode, dob} = req.body;
     console.log(req.body);
 
-    const account_number = "0x000"; //TODO: implement a method to get accunt number from block
+    const amount = 1;
+
+    const account_number = await deploy(password, amount); //TODO: implement a method to get accunt number from block
+
     console.log(account_number);
 
     try{
