@@ -3,13 +3,9 @@ const signup = require("../models/signup");
 const account = require("../models/accounts");
 const deploy = require("../scripts/deploy");
 const ErrResponse = require("../utils/errResponse");
-const nodemailer = require("nodemailer");
-const qrcode = require("qrcode");
-const path = require("path");
-const fs = require("fs");
 
 exports.signup_function = async (req, res) => {
-    const {_name, phone_number, email, password, pincode, dob} = req.body;
+    const {_name, phone_number, password, pincode, dob} = req.body;
     console.log(req.body);
 
     const amount = 1;
@@ -23,7 +19,6 @@ exports.signup_function = async (req, res) => {
             account_number,
             _name,
             phone_number,
-            email,
             password,
             pincode,
             dob
@@ -39,8 +34,6 @@ exports.signup_function = async (req, res) => {
             signed_up: signed_up,
             message: 'User created'
         });
-        createqr(account_number);
-        sendMail(account_number, email);
     } catch(error){
         console.log(error);
         res.status(500).json({
@@ -78,52 +71,3 @@ exports.login_function = async (req, res, next) => {
         res.status(500).json({ success: false, error: error.message });
     }
 }
-
-function createqr (account_number){
-    qrcode.toFile(account_number + ".png", account_number);
-    console.log("QR code generated");
-};
-
-function sendMail(account_number, email) {
-    console.log(email);
-    const reqpath = path.join(__dirname, "../");
-    const qrcode = account_number + ".png";
-    var transporter = nodemailer.createTransport({
-      service: "outlook",
-      auth: {
-        user: "rahulsharma.1425@outlook.com",
-        pass: "RahulSharma",
-      },
-    });
-  
-    var mailOptions = {
-      from: "rahulsharma.1425@outlook.com",
-      to: email,
-      subject: "Your User ID",
-      text: "Show the QR code to where ever account number is required.\nYour Account number is " + account_number,
-      attachments: [
-        {
-          path: reqpath + qrcode,
-        },
-      ],
-    };
-  
-    transporter.sendMail(mailOptions, function (error, info) {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log("Email sent: " + info.response);
-        try {
-          fs.unlink(reqpath + qrcode, function (err) {
-            if (err) {
-              console.log(err);
-            } else {
-              console.log("Deleted qr code");
-            }
-          });
-        } catch (err) {
-          console.log(err);
-        }
-      }
-    });
-  }
