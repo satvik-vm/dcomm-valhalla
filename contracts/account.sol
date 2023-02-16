@@ -9,7 +9,7 @@ contract account{
         password = __password;
         account_number = address(this);
         amount = __amount;
-    }
+    } 
 
     function getBalance() view public returns (int){
         return amount;
