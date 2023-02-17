@@ -55,12 +55,14 @@ const JwtLogin = () => {
   const { login } = useAuth();
 
   const handleFormSubmit = async (values) => {
-    setLoading(true);
+    console.log(values.account_number);
+    console.log(values.password);
+    // setLoading(true);
     try {
-      await login(values.email, values.password);
+      await login(values.account_number, values.password);
       navigate('/');
     } catch (e) {
-      setLoading(false);
+      // setLoading(false);
     }
   };
 
@@ -86,15 +88,15 @@ const JwtLogin = () => {
                     <TextField
                       fullWidth
                       size="small"
-                      type="email"
-                      name="email"
-                      label="Email"
+                      type="text"
+                      name="account_number"
+                      label="Account Number"
                       variant="outlined"
                       onBlur={handleBlur}
-                      value={values.email}
+                      value={values.account_number}
                       onChange={handleChange}
-                      helperText={touched.email && errors.email}
-                      error={Boolean(errors.email && touched.email)}
+                      // helperText={touched.email && errors.email}
+                      // error={Boolean(errors.email && touched.email)}
                       sx={{ mb: 3 }}
                     />
 

@@ -33,8 +33,8 @@ const SimpleForm = () => {
   }, [state.password]);
 
   const handleSubmit = (event) => {
-    // console.log("submitted");
-    // console.log(event);
+    console.log(event);
+    console.log("submitted");
   };
 
   const handleChange = (event) => {

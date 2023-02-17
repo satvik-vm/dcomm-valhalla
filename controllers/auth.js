@@ -9,24 +9,28 @@ const path = require("path");
 const fs = require("fs");
 
 exports.signup_function = async (req, res) => {
-    const {_name, phone_number, email, password, pincode, dob} = req.body;
+    const {_name, phone_number, email, password, pincode, age} = req.body.userCredentials;
     console.log(req.body);
 
-    const amount = 1;
+    const account_number = await deploy.main();
 
-    const account_number = await deploy(password, amount); //TODO: implement a method to get accunt number from block
+    const avatar = '/assets/images/face-6.jpg';
+
+    const role = "client";
 
     console.log(account_number);
 
     try{
         const signed_up = await signup.create({
             account_number,
+            avatar,
             _name,
             phone_number,
             email,
             password,
             pincode,
-            dob
+            age,
+            role
         });
         const main_account = account_number;
         const account_created = await account.create({
@@ -39,8 +43,8 @@ exports.signup_function = async (req, res) => {
             signed_up: signed_up,
             message: 'User created'
         });
-        createqr(account_number);
-        sendMail(account_number, email);
+        // createqr(account_number);
+        // sendMail(account_number, email);
     } catch(error){
         console.log(error);
         res.status(500).json({
@@ -51,14 +55,16 @@ exports.signup_function = async (req, res) => {
 };
 
 exports.login_function = async (req, res, next) => {
-    const {account_number, password} = req.body;
+    const {account_number, password} = req.body.userCredentials;
+    console.log(req.body);
 
     if (!account_number || !password) {
-        return next(new ErrResponse("Please provide an email and password", 400));
+        return next(new ErrResponse("Please provide an account number and password", 400));
     }
 
     try{
         const user = await signup.findOne({account_number: account_number}).select("+password");
+        console.log(user);
 
         if(!user){
             return next(new ErrResponse("User not found", 401));
@@ -71,8 +77,14 @@ exports.login_function = async (req, res, next) => {
         }
 
         res.status(201).json({
-            ok: true,
-            message: 'Signed In'
+            accessToken: 201,
+            user: {
+              id: user.account_number,
+              avatar: user.avatar,
+              email: user.email,
+              name: user._name,
+              role: user.role,
+            }
         });
     }   catch (error) {
         res.status(500).json({ success: false, error: error.message });

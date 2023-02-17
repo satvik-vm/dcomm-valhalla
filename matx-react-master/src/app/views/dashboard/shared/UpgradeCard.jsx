@@ -1,4 +1,17 @@
-import { Button, Card, styled } from '@mui/material';
+import {
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  Icon,
+  Radio,
+  RadioGroup,
+  styled,
+  Card
+} from "@mui/material";
+import { Span } from "app/components/Typography";
+import { useEffect, useState } from "react";
+import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
 import { convertHexToRGB } from 'app/utils/utils';
 
 const CardRoot = styled(Card)(({ theme }) => ({
@@ -40,6 +53,8 @@ const UpgradeCard = () => {
         >
           Deposit
         </Button>
+
+
         <br/>
         <br/>
         <Button
@@ -50,6 +65,7 @@ const UpgradeCard = () => {
         >
           Withdrawal
         </Button>
+
       </StyledCard>
     </CardRoot>
   );

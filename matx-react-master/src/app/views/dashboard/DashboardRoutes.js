@@ -8,4 +8,6 @@ const dashboardRoutes = [
   { path: '/dashboard/default', element: <Analytics />, auth: authRoles.admin },
 ];
 
+
+
 export default dashboardRoutes;

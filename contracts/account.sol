@@ -2,13 +2,11 @@ pragma solidity ^0.8.17;
 
 contract account{
     address account_number;
-    string password;
     int amount;
 
-    constructor(string memory __password, int __amount){
-        password = __password;
+    constructor(){
         account_number = address(this);
-        amount = __amount;
+        amount = 0;
     } 
 
     function getBalance() view public returns (int){

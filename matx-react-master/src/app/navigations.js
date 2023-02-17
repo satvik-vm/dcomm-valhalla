@@ -33,6 +33,15 @@ export const navigations = [
       { name: 'Table', path: '/material/table', iconText: 'T' },
     ],
   },
+
+  {label: 'CrowdFunds', type: 'label'},
+  {
+    name: 'CrowdFunds',
+    icon: 'edit',
+    path: '/material/form',
+  },
+
+
   {
     name: 'Charts',
     icon: 'trending_up',

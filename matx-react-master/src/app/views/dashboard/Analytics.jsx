@@ -36,6 +36,7 @@ const H4 = styled('h4')(({ theme }) => ({
 const Analytics = () => {
   const { palette } = useTheme();
 
+  console.log('Dash');
   return (
     <Fragment>
       <ContentBox className="analytics">

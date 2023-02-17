@@ -83,12 +83,15 @@ const AuthContext = createContext({
 export const AuthProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState)
 
-    const login = async (email, password) => {
-        const response = await axios.post('/api/auth/login', {
-            email,
-            password,
+    const login = async (account_num, password) => {
+        const userCredentials = {account_number: account_num, password: password};
+
+        const response = await axios.post('http://localhost:5000/api/auth/login_function', {
+            userCredentials,
         })
         const { accessToken, user } = response.data
+        console.log(accessToken)
+        console.log(user)
 
         setSession(accessToken)
 
@@ -100,11 +103,16 @@ export const AuthProvider = ({ children }) => {
         })
     }
 
-    const register = async (email, username, password) => {
-        const response = await axios.post('/api/auth/register', {
-            email,
-            username,
-            password,
+    const register = async (email, username, password, phone_number, pincode, age)  => {
+        const config = {
+            header: {
+              "Content-Type": "application/json",
+            },
+        };
+        const userCredentials = {_name: username, phone_number: phone_number, email: email, password: password, pincode: pincode, age: age};
+        const response = await axios.post('http://localhost:5000/api/auth/signup_function', {
+            userCredentials,
+            // config
         })
 
         const { accessToken, user } = response.data

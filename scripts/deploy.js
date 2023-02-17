@@ -6,16 +6,15 @@
 // global scope, and execute the script.
 const hre = require("hardhat");
 
-async function main(password, amount) {
-  var amount = 10;
-
+exports.main = async() => {
   const account = await hre.ethers.getContractFactory("account");
-  const acc = await account.deploy(password, amount, {value: 0});
-
+  console.log(1);
+  const acc = await account.deploy({value: 0});
+  console.log(2);
   await acc.deployed();
-
+  console.log(3);
   console.log(
-    "Account created successfully with initail balance " + amount + " and deployed to " + acc.address
+    "Account created successfully and deployed to " + acc.address
   );
 
   return acc.address;
@@ -23,9 +22,9 @@ async function main(password, amount) {
 
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+// main().catch((error) => {
+//   console.error(error);
+//   process.exitCode = 1;
+// });
 
-module.exports = main;
+// module.exports = main;

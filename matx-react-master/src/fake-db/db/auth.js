@@ -36,7 +36,7 @@ Mock.onPost('/api/auth/login').reply(async (config) => {
     });
 
     return [
-      200,
+      201,
       {
         accessToken,
         user: {

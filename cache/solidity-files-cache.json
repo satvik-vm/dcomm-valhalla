@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/home/satvik/Desktop/dev/valhalla/contracts/account.sol": {
-      "lastModificationDate": 1676568949379,
-      "contentHash": "1025f6fb4016e4dedad3fe903002f8e8",
+      "lastModificationDate": 1676631589459,
+      "contentHash": "85a931a6014a3130bab74e13ac6a2e8c",
       "sourceName": "contracts/account.sol",
       "solcConfig": {
         "version": "0.8.17",

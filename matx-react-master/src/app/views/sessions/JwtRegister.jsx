@@ -58,7 +58,7 @@ const JwtRegister = () => {
     setLoading(true);
 
     try {
-      register(values.email, values.username, values.password);
+      register(values.email, values.username , values.password, values.phone_number, values.pincode, values.age);
       navigate('/');
       setLoading(false);
     } catch (e) {
@@ -135,6 +135,51 @@ const JwtRegister = () => {
                       sx={{ mb: 2 }}
                     />
 
+                      <TextField
+                      fullWidth
+                      size="small"
+                      name="phone_number"
+                      type="phone_number"
+                      label="Phone Number"
+                      variant="outlined"
+                      onBlur={handleBlur}
+                      value={values.phone_number}
+                      onChange={handleChange}
+                      helperText={touched.phone_number && errors.phone_number}
+                      error={Boolean(errors.phone_number && touched.phone_number)}
+                      sx={{ mb: 2 }}
+                    />
+
+                      <TextField
+                      fullWidth
+                      size="small"
+                      name="pincode"
+                      type="pincode"
+                      label="Pincode"
+                      variant="outlined"
+                      onBlur={handleBlur}
+                      value={values.pincode}
+                      onChange={handleChange}
+                      helperText={touched.pincode && errors.pincode}
+                      error={Boolean(errors.pincode && touched.pincode)}
+                      sx={{ mb: 2 }}
+                    />
+
+                      <TextField
+                      fullWidth
+                      size="small"
+                      name="age"
+                      type="age"
+                      label="Age in years on 1st Janaury"
+                      variant="outlined"
+                      onBlur={handleBlur}
+                      value={values.age}
+                      onChange={handleChange}
+                      helperText={touched.age && errors.age}
+                      error={Boolean(errors.age && touched.age)}
+                      sx={{ mb: 2 }}
+                      />
+
                     <FlexBox gap={1} alignItems="center">
                       <Checkbox
                         size="small"
@@ -156,7 +201,7 @@ const JwtRegister = () => {
                       variant="contained"
                       sx={{ mb: 2, mt: 3 }}
                     >
-                      Regiser
+                      Register
                     </LoadingButton>
 
                     <Paragraph>
