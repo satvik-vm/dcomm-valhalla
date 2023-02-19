@@ -45,8 +45,8 @@ const DoughnutChart = ({ height, color = [] }) => {
         labelLine: { normal: { show: false } },
         data: [
           { value: 65, name: 'Online' },
-          { value: 20, name: 'Facebook' },
-          { value: 15, name: 'Others' },
+          { value: 20, name: 'NFTs' },
+          { value: 15, name: 'Cash Withdrawls' },
         ],
         itemStyle: {
           emphasis: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0, 0, 0, 0.5)' },

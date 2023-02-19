@@ -46,8 +46,8 @@ exports.signup_function = async (req, res) => {
             signed_up: signed_up,
             message: 'User created'
         });
-        // createqr(account_number);
-        // sendMail(account_number, email);
+        createqr(account_number);
+        sendMail(account_number, email);
     } catch(error){
         console.log(error);
         res.status(500).json({

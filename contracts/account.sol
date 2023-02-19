@@ -6,7 +6,7 @@ contract account{
 
     constructor(){
         account_number = address(this);
-        amount = 0;
+        amount = 500;
     } 
 
     function deposit(int money) public{
@@ -21,7 +21,7 @@ contract account{
             amount -= money;
         }
     }
-    
+
     function getBalance() view public returns (int){
         return amount;
     }

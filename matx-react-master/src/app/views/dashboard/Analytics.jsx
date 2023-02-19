@@ -42,9 +42,11 @@ const Analytics = () => {
       <ContentBox className="analytics">
         <Grid container spacing={3}>
           <Grid item lg={8} md={8} sm={12} xs={12}>
-            
-          <StatCards2 />  
+        
+            <StatCards2 />  
             {/*<StatCards />*/}
+            <Campaigns/>
+            <br></br>
             <TopSellingTable />
             
 
@@ -74,7 +76,7 @@ const Analytics = () => {
             </Card>
 
             <UpgradeCard />
-            <Campaigns />
+            {/* <Campaigns /> */}
           </Grid>
         </Grid>
       </ContentBox>

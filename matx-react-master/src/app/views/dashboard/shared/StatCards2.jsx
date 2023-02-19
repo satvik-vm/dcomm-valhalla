@@ -64,7 +64,7 @@ const StatCards2 = () => {
             <IconBox sx={{ background: 'rgba(9, 182, 109, 0.15)' }}>
               <Icon className="icon">expand_less</Icon>
             </IconBox>
-            <Span textcolor={'#08ad6c'}>(+21%)</Span>
+            <Span textcolor={'#08ad6c'}>(+20%)</Span>
           </ContentBox>
         </Card>
       </Grid>
@@ -79,11 +79,11 @@ const StatCards2 = () => {
           </ContentBox>
 
           <ContentBox sx={{ pt: 2 }}>
-            <H1>$2.8M</H1>
+            <H1>0</H1>
             <IconBox sx={{ background: bgError }}>
               <Icon className="icon">expand_less</Icon>
             </IconBox>
-            <Span textcolor={textError}>(+21%)</Span>
+            <Span textcolor={textError}>(+0%)</Span>
           </ContentBox>
         </Card>
       </Grid>

@@ -96,7 +96,7 @@ const JwtRegister = () => {
                       size="small"
                       type="text"
                       name="username"
-                      label="Username"
+                      label="N  ame"
                       variant="outlined"
                       onBlur={handleBlur}
                       value={values.username}

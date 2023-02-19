@@ -76,7 +76,7 @@ const TopSellingTable = () => {
           <TableHead>
             <TableRow>
               <TableCell sx={{ px: 3 }} colSpan={4}>
-                Name
+                Trnx Hash ID
               </TableCell>
               <TableCell sx={{ px: 0 }} colSpan={2}>
                 Amount
@@ -106,12 +106,12 @@ const TopSellingTable = () => {
                 <TableCell sx={{ px: 0 }} align="left" colSpan={2}>
                   {product.available ? (
                     product.available < 20 ? (
-                      <Small bgcolor={bgSecondary}>{product.available} available</Small>
+                      <Small bgcolor={bgSecondary}>Deposit</Small>
                     ) : (
-                      <Small bgcolor={bgPrimary}>in stock</Small>
+                      <Small bgcolor={bgPrimary}>Withdrawl</Small>
                     )
                   ) : (
-                    <Small bgcolor={bgError}>out of stock</Small>
+                    <Small bgcolor={bgError}>Transfer</Small>
                   )}
                 </TableCell>
 
@@ -131,27 +131,27 @@ const TopSellingTable = () => {
 
 const productList = [
   {
-    name: 'earphone',
+    name: '0x3d6f73d466c79b3d7a3f1e4e71cdb22caf499960e97fc1c08453a1d432f2b226',
     price: 100,
     available: 15,
   },
   {
-    name: 'earphone',
+    name: '0x94eb0f1d8af90491251eb47eee7a197881045a6652761239b02b7c56f16e0b8d',
     price: 1500,
     available: 30,
   },
   {
-    name: 'iPhone x',
+    name: '0x94eb0f1d8af90491251eb47eee7a197881045a6652761239b02b7c56f16e0b8d',
     price: 1900,
     available: 35,
   },
   {
-    name: 'iPhone x',
+    name: '0x0740af9e5cae2b1d1c5e76b8d99d79d18ff713340c1484089c4b004408980f34',
     price: 100,
     available: 0,
   },
   {
-    name: 'Head phone',
+    name: '0x1fe270484f47599b56ac8036d8b27592c73bdf145a96a534c6b569d1c13d06ff',
     price: 1190,
     available: 5,
   },
