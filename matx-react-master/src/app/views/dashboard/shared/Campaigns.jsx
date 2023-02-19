@@ -1,6 +1,8 @@
 import { Box } from '@mui/material';
 import { MatxProgressBar, SimpleCard } from 'app/components';
 import { Small } from 'app/components/Typography';
+import React, { useState, useContext } from "react";
+//import { WatchListContext } from "app/views/dashboard/cryptoTracker/context/watchListContext";
 
 const Campaigns = () => {
   return (

@@ -9,12 +9,8 @@ contract account{
         amount = 0;
     } 
 
-    function getBalance() view public returns (int){
-        return amount;
-    }
-
     function deposit(int money) public{
-        amount += money;
+        amount = amount + money;
     }
 
     function withdraw(int money) public{
@@ -24,5 +20,9 @@ contract account{
         if(money <= amount){
             amount -= money;
         }
+    }
+    
+    function getBalance() view public returns (int){
+        return amount;
     }
 } 

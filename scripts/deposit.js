@@ -9,13 +9,11 @@ exports.main = async (account_number, amount) => {
 
     var mss = await acc.deposit(parseInt(amount));
 
-    const balance_1 = parseInt((await acc.getBalance()).toString());
-    console.log("balance_1: ", balance_1);
-    const balance_2 = getBalance.main(account_number);
-    console.log("balance_2: ", balance_2);
-    mss["balance"] = balance_1;
+    await new Promise(done => setTimeout(() => done(), 5000));
 
-    console.log(mss);
+    const balance = parseInt((await acc.getBalance()).toString());
+
+    mss["balance"] = balance;
 
     return mss;
 }

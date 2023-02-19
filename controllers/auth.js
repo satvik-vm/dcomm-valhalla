@@ -104,9 +104,7 @@ exports.deposit_function = async (req, res, next) => {
 	var today = new Date();
 
 	const mss = await deposit.main(account_number, amount);
-	// const balance = await getbalance.main(account_number);
   console.log(mss);
-	// console.log(balance);
 
 	var DD = String(today.getDate()).padStart(2, '0');
 	var MM = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -137,8 +135,6 @@ exports.withdrawl_function = async (req, res, next) => {
 	console.log(req.body);
 
 	const mss = await withdraw.main(account_number, amount);
-	const balance = await getbalance.main(account_number);
-	console.log(balance);
   console.log(mss);
 
 	var DD = String(today.getDate()).padStart(2, '0');
@@ -152,7 +148,7 @@ exports.withdrawl_function = async (req, res, next) => {
 	res.status(201).json({
 		accessToken: 201, 
 		user: {
-			balance: balance,
+			balance: mss.balance,
 			id: account_number,
 			amount: amount,
 			hash: mss.hash,

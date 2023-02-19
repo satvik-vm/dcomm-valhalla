@@ -93,7 +93,10 @@ const UpgradeCard = () => {
 
   const handleClickdep = (event) => {
     try{
-      deposit(amount);
+      const mss =  deposit(amount);
+      // if(mss != null){
+      //   alert("Trasanction completed");
+      // }
     }catch (e) {
       console.log(e);
     }
@@ -106,6 +109,10 @@ const UpgradeCard = () => {
       console.log(e);
     }
  };
+
+ const resetInputField = () => {
+  setState("");
+  };
   
   
   return (
@@ -125,7 +132,7 @@ const UpgradeCard = () => {
           color="primary"
           variant="contained"
           sx={{ textTransform: 'uppercase' }}
-          onClick = {handleClickdep}
+          onClick = {(event) => {handleClickdep(event); resetInputField();}}
           id="deposit_btn"
         >
           Deposit <Icon>keyboard_arrow_right</Icon>
@@ -138,7 +145,7 @@ const UpgradeCard = () => {
           color="primary"
           variant="contained"
           sx={{ textTransform: 'uppercase' }}
-          onClick = {handleClickwit}
+          onClick = {(event) => {handleClickwit(event); resetInputField();}}
           id="withdrawl_btn"
         >
           
