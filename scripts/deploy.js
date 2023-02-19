@@ -8,11 +8,11 @@ const hre = require("hardhat");
 
 exports.main = async() => {
   const account = await hre.ethers.getContractFactory("account");
-  console.log(1);
+  // console.log(1);
   const acc = await account.deploy({value: 0});
-  console.log(2);
+  // console.log(2);
   await acc.deployed();
-  console.log(3);
+  // console.log(3);
   console.log(
     "Account created successfully and deployed to " + acc.address
   );

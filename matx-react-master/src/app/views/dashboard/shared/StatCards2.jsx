@@ -1,4 +1,5 @@
 import { Card, Fab, Grid, Icon, lighten, styled, useTheme } from '@mui/material';
+import useAuth from 'app/hooks/useAuth';
 
 const ContentBox = styled('div')(() => ({
   display: 'flex',
@@ -46,7 +47,7 @@ const StatCards2 = () => {
   const { palette } = useTheme();
   const textError = palette.error.main;
   const bgError = lighten(palette.error.main, 0.85);
-
+  const {user} = useAuth(); 
   return (
     <Grid container spacing={3} sx={{ mb: 3 }}>
       <Grid item xs={12} md={6}>
@@ -59,7 +60,7 @@ const StatCards2 = () => {
           </ContentBox>
 
           <ContentBox sx={{ pt: 2 }}>
-            <H1>10.8k</H1>
+            <H1 id= "total_balance"> $ {user.balance}</H1>
             <IconBox sx={{ background: 'rgba(9, 182, 109, 0.15)' }}>
               <Icon className="icon">expand_less</Icon>
             </IconBox>

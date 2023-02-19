@@ -30,6 +30,7 @@
     "prompt-sync": "^4.2.0",
     "qrcode": "^1.5.1",
     "react-native": "^0.71.2",
+    "react-native-camera": "^4.2.1",
     "web3": "^1.8.2"
   },
   "devDependencies": {

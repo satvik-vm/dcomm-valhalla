@@ -3,6 +3,8 @@ import jwtDecode from 'jwt-decode'
 import axios from 'axios.js'
 import { MatxLoading } from 'app/components'
 
+var user_init;
+
 const initialState = {
     isAuthenticated: false,
     isInitialised: false,
@@ -66,6 +68,37 @@ const reducer = (state, action) => {
                 user,
             }
         }
+
+        case 'QUERY_BALANCE': {
+            const {amount} = action.payload
+
+            return {
+                ...state,
+                isAuthenticated: true,
+                amount,
+            }
+        }
+
+        case 'DEPOSIT': {
+            const {user} = action.payload
+
+            return {
+                ...state,
+                isAuthenticated: true,
+                user,
+            }
+        }
+
+        case 'WITHDRAW': {
+            const {user} = action.payload
+
+            return {
+                ...state,
+                isAuthenticated: true,
+                user,
+            }
+        }
+
         default: {
             return { ...state }
         }
@@ -78,6 +111,9 @@ const AuthContext = createContext({
     login: () => Promise.resolve(),
     logout: () => { },
     register: () => Promise.resolve(),
+    deposit: () => Promise.resolve(),
+    withdraw: () => Promise.resolve(),
+    // get_balance: () => Promise.resolve(),
 })
 
 export const AuthProvider = ({ children }) => {
@@ -92,6 +128,7 @@ export const AuthProvider = ({ children }) => {
         const { accessToken, user } = response.data
         console.log(accessToken)
         console.log(user)
+        if(accessToken == 201)  user_init = user;
 
         setSession(accessToken)
 
@@ -127,10 +164,70 @@ export const AuthProvider = ({ children }) => {
         })
     }
 
+    const deposit = async(amount) => {
+        const userCredentials = {account_number: user_init.id, amount: amount};
+        const response = await axios.post('http://localhost:5000/api/auth/deposit_function', {
+            userCredentials,
+        })
+
+        const { accessToken, user } = response.data
+
+        console.log(response)
+
+        setSession(accessToken)
+
+        dispatch({
+            type: 'DEPOSIT',
+            payload: {
+                user,
+            },
+        })
+    }
+
+    const withdraw = async(amount) => {
+        console.log(user_init.id);
+        const userCredentials = {account_number: user_init.id, amount: amount};
+        const response = await axios.post('http://localhost:5000/api/auth/withdrawl_function', {
+            userCredentials,
+        })
+
+        const { accessToken, user } = response.data
+
+        console.log(response)
+
+        setSession(accessToken)
+
+        dispatch({
+            type: 'WITHDRAW',
+            payload: {
+                user,
+            },
+        })
+    }
+
     const logout = () => {
         setSession(null)
         dispatch({ type: 'LOGOUT' })
     }
+
+    // const get_balance = async() => {
+    //     const account_number = user_init.id;
+    //     const userCredentials = {account_number: account_number};
+    //     const response = await axios.post('http://localhost:5000/api/auth/get_balance_function', {
+    //         userCredentials,
+    //     })
+
+    //     const { accessToken,  } = response.data;
+
+    //     setSession(accessToken)
+
+    //     dispatch({
+    //         type: 'QUERY_BALANCE',
+    //         payload: {
+    //             user,
+    //         },
+    //     })
+    // }
 
     useEffect(() => {
         ; (async () => {
@@ -183,11 +280,14 @@ export const AuthProvider = ({ children }) => {
                 login,
                 logout,
                 register,
+                deposit,
+                withdraw,
+                // get_balance,
             }}
         >
             {children}
         </AuthContext.Provider>
     )
-}
+};
 
 export default AuthContext

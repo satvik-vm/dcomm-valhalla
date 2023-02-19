@@ -13,18 +13,16 @@ contract account{
         return amount;
     }
 
-    function deposit(int money) public returns (int){
+    function deposit(int money) public{
         amount += money;
-        return getBalance();
     }
 
-    function withdraw(int money) public returns (int){
+    function withdraw(int money) public{
         if(money > amount){
-            return -1;
+            amount = 0;
         }
         if(money <= amount){
             amount -= money;
-            return getBalance();
         }
     }
 } 
