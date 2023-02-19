@@ -2,31 +2,27 @@ pragma solidity ^0.8.17;
 
 contract account{
     address account_number;
-    string password;
     int amount;
 
-    constructor(string memory __password, int __amount){
-        password = __password;
+    constructor(){
         account_number = address(this);
-        amount = __amount;
+        amount = 500;
     } 
 
-    function getBalance() view public returns (int){
-        return amount;
+    function deposit(int money) public{
+        amount = amount + money;
     }
 
-    function deposit(int money) public returns (int){
-        amount += money;
-        return getBalance();
-    }
-
-    function withdraw(int money) public returns (int){
+    function withdraw(int money) public{
         if(money > amount){
-            return -1;
+            amount = 0;
         }
         if(money <= amount){
             amount -= money;
-            return getBalance();
         }
+    }
+
+    function getBalance() view public returns (int){
+        return amount;
     }
 } 

@@ -8,6 +8,11 @@ const signupSchema = new mongoose.Schema({
         unique: true
     },
 
+    avatar: {
+        type: String,
+        require: [true]
+    },
+
     _name: {
         type: String,
         required: [true]
@@ -42,7 +47,12 @@ const signupSchema = new mongoose.Schema({
         // },
     },
 
-    dob: {
+    age: {
+        type: String,
+        required: [true]
+    },
+
+    role: {
         type: String,
         required: [true]
     }

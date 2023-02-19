@@ -2,6 +2,9 @@
 const signup = require("../models/signup");
 const account = require("../models/accounts");
 const deploy = require("../scripts/deploy");
+const deposit = require("../scripts/deposit");
+const withdraw = require("../scripts/withdrawl");
+const getbalance = require("../scripts/getBalance");
 const ErrResponse = require("../utils/errResponse");
 const nodemailer = require("nodemailer");
 const qrcode = require("qrcode");
@@ -9,24 +12,28 @@ const path = require("path");
 const fs = require("fs");
 
 exports.signup_function = async (req, res) => {
-    const {_name, phone_number, email, password, pincode, dob} = req.body;
+    const {_name, phone_number, email, password, pincode, age} = req.body.userCredentials;
     console.log(req.body);
 
-    const amount = 1;
+    const account_number = await deploy.main();
 
-    const account_number = await deploy(password, amount); //TODO: implement a method to get accunt number from block
+    const avatar = '/assets/images/face-6.jpg';
+
+    const role = "client";
 
     console.log(account_number);
 
     try{
         const signed_up = await signup.create({
             account_number,
+            avatar,
             _name,
             phone_number,
             email,
             password,
             pincode,
-            dob
+            age,
+            role
         });
         const main_account = account_number;
         const account_created = await account.create({
@@ -51,14 +58,16 @@ exports.signup_function = async (req, res) => {
 };
 
 exports.login_function = async (req, res, next) => {
-    const {account_number, password} = req.body;
+    const {account_number, password} = req.body.userCredentials;
+    console.log(req.body);
 
     if (!account_number || !password) {
-        return next(new ErrResponse("Please provide an email and password", 400));
+        return next(new ErrResponse("Please provide an account number and password", 400));
     }
 
     try{
         const user = await signup.findOne({account_number: account_number}).select("+password");
+        console.log(user);
 
         if(!user){
             return next(new ErrResponse("User not found", 401));
@@ -70,13 +79,97 @@ exports.login_function = async (req, res, next) => {
             return next(new ErrResponse("Invalid Credentials", 401));
         }
 
+		const balance = await getbalance.main(account_number);
+		console.log(balance);
+
         res.status(201).json({
-            ok: true,
-            message: 'Signed In'
+            accessToken: 201,
+            user: {
+              id: user.account_number,
+              avatar: user.avatar,
+              email: user.email,
+              name: user._name,
+              role: user.role,
+			        balance: balance,
+            }
         });
     }   catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
+};
+
+exports.deposit_function = async (req, res, next) => {
+	const {account_number, amount} = req.body.userCredentials;
+	console.log(req.body);
+	var today = new Date();
+
+	const mss = await deposit.main(account_number, amount);
+  console.log(mss);
+
+	var DD = String(today.getDate()).padStart(2, '0');
+	var MM = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+	var YYYY = today.getFullYear();
+	var hh = today.getHours();
+	var mm = today.getMinutes();
+	var ss = today.getSeconds();
+	today = YYYY + " " + MM + " " + DD + " " + hh + " " + " " + mm + " " + ss;
+
+	res.status(201).json({
+		accessToken: 201,
+		user: {
+			balance: mss.balance,
+			id: account_number,
+			amount: amount,
+			hash: mss.hash,
+			date: today,
+		}
+	})
+};
+
+exports.withdrawl_function = async (req, res, next) => {
+	const {account_number, amount} = req.body.userCredentials;
+	console.log(account_number);
+
+	var today = new Date();
+
+	console.log(req.body);
+
+	const mss = await withdraw.main(account_number, amount);
+  console.log(mss);
+
+	var DD = String(today.getDate()).padStart(2, '0');
+	var MM = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+	var YYYY = today.getFullYear();
+	var hh = today.getHours();
+	var mm = today.getMinutes();
+	var ss = today.getSeconds();
+	today = YYYY + " " + MM + " " + DD + " " + hh + " " + " " + mm + " " + ss;
+
+	res.status(201).json({
+		accessToken: 201, 
+		user: {
+			balance: mss.balance,
+			id: account_number,
+			amount: amount,
+			hash: mss.hash,
+			date: today,
+		}
+	})
+};
+
+exports.get_balance_function = async(res, req, next) => {
+	const {account_number} = req.body.userCredentials;
+	console.log("Get balance controllers auth")
+	console.log(res)
+
+	const balance = await getbalance.main(account_number);
+	console.log(balance);
+
+	res.status(201).json({
+		accessToken: 201,
+		balance: balance,
+		account_number: account_number,
+	})
 }
 
 function createqr (account_number){

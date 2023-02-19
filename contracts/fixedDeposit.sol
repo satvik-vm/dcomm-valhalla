@@ -1,7 +1,6 @@
 pragma solidity ^0.8.17;
-import "./savings.sol";
-import "./account.sol";
 
+import "./account.sol";
 contract fixedDeposit{
     uint amount;
     uint time;
@@ -21,7 +20,7 @@ contract fixedDeposit{
         else return false;
     }
 
-    function transfer_amount() public returns (bool){
+    function transfer_amount(address add) public returns (bool){
         // TODO: SEE HOW TO DETERMINE CONTRACT THROUGH ADDRESS
     }
 }
