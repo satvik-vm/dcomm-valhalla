@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Box,
   Card,
   Icon,
@@ -15,6 +14,9 @@ import {
   useTheme,
 } from '@mui/material';
 import { Paragraph } from 'app/components/Typography';
+import useAuth from 'app/hooks/useAuth';
+import React, { useState, useEffect } from 'react';
+
 
 const CardHeader = styled(Box)(() => ({
   display: 'flex',
@@ -61,6 +63,15 @@ const TopSellingTable = () => {
   const bgPrimary = palette.primary.main;
   const bgSecondary = palette.secondary.main;
 
+const {transactions} = useAuth(); 
+// const [tran, setTransactions] = useState([transactions, ]);
+
+// useEffect(() => {
+//   setTransactions(tran)
+//   console.log("Get trans")
+// }, [tran, ]);
+
+// const productList = transactions;
   return (
     <Card elevation={3} sx={{ pt: '20px', mb: 3 }}>
       <CardHeader>
@@ -90,22 +101,22 @@ const TopSellingTable = () => {
             </TableRow>
           </TableHead>
 
-          <TableBody>
-            {productList.map((product, index) => (
+          {/* <TableBody>
+            {transactions.map((t, index) => (
               <TableRow key={index} hover>
                 <TableCell colSpan={4} align="left" sx={{ px: 0, textTransform: 'capitalize' }}>
                   <Box display="flex" alignItems="center">
-                    <Paragraph sx={{ m: 0, ml: 4 }}>{product.name}</Paragraph>
+                    <Paragraph sx={{ m: 0, ml: 4 }}>{t.hash_id}</Paragraph>
                   </Box>
                 </TableCell>
 
                 <TableCell align="left" colSpan={2} sx={{ px: 0, textTransform: 'capitalize' }}>
-                  ${product.price > 999 ? (product.price / 1000).toFixed(1) + 'k' : product.price}
+                  ${t.amount > 999 ? (t.amount / 1000).toFixed(1) + 'k' : t.amount}
                 </TableCell>
 
                 <TableCell sx={{ px: 0 }} align="left" colSpan={2}>
-                  {product.available ? (
-                    product.available < 20 ? (
+                  {t.type ? (
+                    t.type = 'Deposit' ? (
                       <Small bgcolor={bgSecondary}>Deposit</Small>
                     ) : (
                       <Small bgcolor={bgPrimary}>Withdrawl</Small>
@@ -122,39 +133,13 @@ const TopSellingTable = () => {
                 </TableCell>
               </TableRow>
             ))}
-          </TableBody>
+          </TableBody> */}
         </ProductTable>
       </Box>
     </Card>
   );
 };
 
-const productList = [
-  {
-    name: '0x3d6f73d466c79b3d7a3f1e4e71cdb22caf499960e97fc1c08453a1d432f2b226',
-    price: 100,
-    available: 15,
-  },
-  {
-    name: '0x94eb0f1d8af90491251eb47eee7a197881045a6652761239b02b7c56f16e0b8d',
-    price: 1500,
-    available: 30,
-  },
-  {
-    name: '0x94eb0f1d8af90491251eb47eee7a197881045a6652761239b02b7c56f16e0b8d',
-    price: 1900,
-    available: 35,
-  },
-  {
-    name: '0x0740af9e5cae2b1d1c5e76b8d99d79d18ff713340c1484089c4b004408980f34',
-    price: 100,
-    available: 0,
-  },
-  {
-    name: '0x1fe270484f47599b56ac8036d8b27592c73bdf145a96a534c6b569d1c13d06ff',
-    price: 1190,
-    available: 5,
-  },
-];
+
 
 export default TopSellingTable;

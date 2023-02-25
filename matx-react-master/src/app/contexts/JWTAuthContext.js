@@ -99,6 +99,16 @@ const reducer = (state, action) => {
             }
         }
 
+        case 'TRANSACTIONS': {
+            const {transactions} = action.payload
+
+            return {
+                ...state,
+                isAuthenticated: true,
+                transactions,
+            }
+        }
+
         default: {
             return { ...state }
         }
@@ -113,6 +123,7 @@ const AuthContext = createContext({
     register: () => Promise.resolve(),
     deposit: () => Promise.resolve(),
     withdraw: () => Promise.resolve(),
+    transactions: () => Promise.resolve(),
     // get_balance: () => Promise.resolve(),
 })
 
@@ -210,6 +221,25 @@ export const AuthProvider = ({ children }) => {
         dispatch({ type: 'LOGOUT' })
     }
 
+    const transactions=async() => {
+        console.log("transactins called from useauth " );
+        const userCredentials = {account_number: user_init.id};
+        const response = await axios.post('http://localhost:5000/api/auth/get_transactions', {
+            userCredentials,
+        })
+
+        const {transactions} = response.data;
+        console.log("transactions from AuthContext " + transactions);
+
+        dispatch({
+            type: 'TRANSACTIONS',
+            payload:{
+                transactions,
+            }
+
+        })
+    }
+
     // const get_balance = async() => {
     //     const account_number = user_init.id;
     //     const userCredentials = {account_number: account_number};
@@ -282,6 +312,7 @@ export const AuthProvider = ({ children }) => {
                 register,
                 deposit,
                 withdraw,
+                transactions,
                 // get_balance,
             }}
         >

@@ -1,6 +1,7 @@
 // const login = require("../models/login");
 const signup = require("../models/signup");
 const account = require("../models/accounts");
+const transactions = require("../models/transactions");
 const deploy = require("../scripts/deploy");
 const deposit = require("../scripts/deposit");
 const withdraw = require("../scripts/withdrawl");
@@ -35,19 +36,32 @@ exports.signup_function = async (req, res) => {
             age,
             role
         });
+
+		const hash_id = "0x00000";
+		const amount = 500;
+		const timestamp = new Date().toString();
+		const type = 'Initial Deposit';
+
         const main_account = account_number;
         const account_created = await account.create({
-            main_account,
+			main_account,
         });
+
+		const transaction_instance = await transactions.create({
+			account_number,
+			transaction:[{hash_id: hash_id, amount: amount, timestamp: timestamp, type: type}],
+		});
+
         console.log(signed_up);
         console.log(account_created);
+		    console.log(transaction_instance);
         res.status(201).json({
             ok: true,
             signed_up: signed_up,
             message: 'User created'
         });
-        createqr(account_number);
-        sendMail(account_number, email);
+        // createqr(account_number);
+        // sendMail(account_number, email);
     } catch(error){
         console.log(error);
         res.status(500).json({
@@ -90,7 +104,7 @@ exports.login_function = async (req, res, next) => {
               email: user.email,
               name: user._name,
               role: user.role,
-			        balance: balance,
+              balance: balance,
             }
         });
     }   catch (error) {
@@ -104,7 +118,7 @@ exports.deposit_function = async (req, res, next) => {
 	var today = new Date();
 
 	const mss = await deposit.main(account_number, amount);
-  console.log(mss);
+  	console.log(mss);
 
 	var DD = String(today.getDate()).padStart(2, '0');
 	var MM = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -114,6 +128,13 @@ exports.deposit_function = async (req, res, next) => {
 	var ss = today.getSeconds();
 	today = YYYY + " " + MM + " " + DD + " " + hh + " " + " " + mm + " " + ss;
 
+	const date = new Date().toString();
+	const doc = await transactions.findOne({account_number: account_number});
+	
+	doc.transaction.push({hash_id: mss.hash, amount: amount, timestamp: date, type: 'Deposit'});
+
+	await doc.save();
+
 	res.status(201).json({
 		accessToken: 201,
 		user: {
@@ -122,6 +143,7 @@ exports.deposit_function = async (req, res, next) => {
 			amount: amount,
 			hash: mss.hash,
 			date: today,
+			type: 'Deposit',
 		}
 	})
 };
@@ -135,7 +157,7 @@ exports.withdrawl_function = async (req, res, next) => {
 	console.log(req.body);
 
 	const mss = await withdraw.main(account_number, amount);
-  console.log(mss);
+  	console.log(mss);
 
 	var DD = String(today.getDate()).padStart(2, '0');
 	var MM = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -145,6 +167,13 @@ exports.withdrawl_function = async (req, res, next) => {
 	var ss = today.getSeconds();
 	today = YYYY + " " + MM + " " + DD + " " + hh + " " + " " + mm + " " + ss;
 
+	const date = new Date().toString();
+	const doc = await transactions.findOne({account_number: account_number});
+	
+	doc.transaction.push({hash_id: mss.hash, amount: amount, timestamp: date, type: 'Withdrawl'});
+
+	await doc.save();
+
 	res.status(201).json({
 		accessToken: 201, 
 		user: {
@@ -153,6 +182,7 @@ exports.withdrawl_function = async (req, res, next) => {
 			amount: amount,
 			hash: mss.hash,
 			date: today,
+			type: 'Withdrawl',
 		}
 	})
 };
@@ -170,6 +200,23 @@ exports.get_balance_function = async(res, req, next) => {
 		balance: balance,
 		account_number: account_number,
 	})
+};
+
+exports.get_transactions = async(req, res, next) => {
+	const {account_number} = req.body.userCredentials;
+
+	const doc = await transactions.findOne({account_number: account_number});
+
+	console.log("transaction: " + doc.transaction);
+
+  	const trans = doc.transaction;
+
+	res.status(201).json({
+    // user: {
+    //   transactions: trans,
+    // }
+	transactions: trans,
+  });
 }
 
 function createqr (account_number){
@@ -219,4 +266,4 @@ function sendMail(account_number, email) {
         }
       }
     });
-  }
+}
