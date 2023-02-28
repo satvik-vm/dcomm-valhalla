@@ -1,33 +1,32 @@
 import { Box } from '@mui/material';
 import { MatxProgressBar, SimpleCard } from 'app/components';
 import { Small } from 'app/components/Typography';
-import React, { useState, useContext } from "react";
-import App from "app/views/dashboard/cryptoTracker/src/App"
-//import { WatchListContext } from "app/views/dashboard/cryptoTracker/context/watchListContext";
+import ReactDOM from "react-dom";
+import SimpleTable  from './CoinTracker/SimpleTable';
+
+
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
+import { Routes, Route } from 'react-router-dom'
 
 const Campaigns = () => {
+
+  const [coins, setCoins] = useState([])
+
+    const url = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false'
+
+    useEffect(() => {
+        axios.get(url).then((response) => {
+        setCoins(response.data)
+        // console.log(response.data[0])
+        }).catch((error) => {
+        console.log(error)
+        })
+    }, [])
+
   return (
     <Box>
-      <SimpleCard title="Market">
-        <Small color="text.secondary">Today</Small>
-        <MatxProgressBar value={75} color="primary" text="BTC" />
-        <MatxProgressBar value={45} color="secondary" text="ETH" />
-        <MatxProgressBar value={15} color="primary" text="SOL" />
-
-        <Small color="text.secondary" display="block" pt={4}>
-          Yesterday
-        </Small>
-        <MatxProgressBar value={75} color="primary" text="BTC" />
-        <MatxProgressBar value={40} color="secondary" text="ETH" />
-        <MatxProgressBar value={20} color="primary" text="SOL" />
-
-        <Small color="text.secondary" display="block" pt={4}>
-          Yesterday
-        </Small>
-        <MatxProgressBar value={70} color="primary" text="BTC" />
-        <MatxProgressBar value={67} color="secondary" text="ETH" />
-        <MatxProgressBar value={26} color="primary" text="SOL" />
-      </SimpleCard>
+      <SimpleTable coins = {coins}/>
     </Box>
   );
 };
