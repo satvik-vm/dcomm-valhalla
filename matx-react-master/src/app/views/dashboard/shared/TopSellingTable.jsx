@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Card,
   Icon,
   IconButton,
@@ -15,6 +16,7 @@ import {
 } from '@mui/material';
 import { Paragraph } from 'app/components/Typography';
 import useAuth from 'app/hooks/useAuth';
+import { findIndex } from 'lodash';
 import React, { useState, useEffect } from 'react';
 
 
@@ -63,19 +65,88 @@ const TopSellingTable = () => {
   const bgPrimary = palette.primary.main;
   const bgSecondary = palette.secondary.main;
 
-const {transactions} = useAuth(); 
+  const productList = [
+    {
+      imgUrl: '/assets/images/products/headphone-2.jpg',
+      name: 'earphone',
+      price: 100,
+      available: 15,
+    },
+    {
+      imgUrl: '/assets/images/products/headphone-3.jpg',
+      name: 'earphone',
+      price: 1500,
+      available: 30,
+    },
+    {
+      imgUrl: '/assets/images/products/iphone-2.jpg',
+      name: 'iPhone x',
+      price: 1900,
+      available: 35,
+    },
+    {
+      imgUrl: '/assets/images/products/iphone-1.jpg',
+      name: 'iPhone x',
+      price: 100,
+      available: 0,
+    },
+    {
+      imgUrl: '/assets/images/products/headphone-3.jpg',
+      name: 'Head phone',
+      price: 1190,
+      available: 5,
+    },
+  ];
+  
+
+  // const [transaction_arr, setTransactions] = useState([user.transactions])
+  
+  // useEffect(() => {
+	  //   setTransactions(user)
+	  // }, [user]);
+	  
+	  
+	  // console.log("Button Clicked")
+const {user, transactions} = useAuth(); 
+const handleClick = (event) => {
+		  
+  try{
+    // call_trans();
+	transactions();
+  }catch (e) {
+    console.log(e);
+  }
+
+  console.log("User called from TopSellingTable ")
+  console.log(user.transac)
+  console.log(productList)
+  // console.log(transaction_arr);
+  // setTransactions(transaction_arr) ;
+};
+
+
+// const transaction_arr = Object.values(user.transactions)
 // const [tran, setTransactions] = useState([transactions, ]);
 
-// useEffect(() => {
-//   setTransactions(tran)
-//   console.log("Get trans")
-// }, [tran, ]);
+
 
 // const productList = transactions;
   return (
     <Card elevation={3} sx={{ pt: '20px', mb: 3 }}>
       <CardHeader>
         <Title>Transaction History</Title>
+
+        <Button
+          size="small"
+          color="primary"
+          variant="contained"
+          sx={{ textTransform: 'uppercase' }}
+          onClick = {(event) => {handleClick(event);}}
+          id="deposit_btn"
+        >
+          Update <Icon>forward</Icon>
+        </Button>
+        
         <Select size="small" defaultValue="this_month">
           <MenuItem value="this_month">This Month</MenuItem>
           <MenuItem value="last_month">Last Month</MenuItem>
@@ -86,10 +157,10 @@ const {transactions} = useAuth();
         <ProductTable>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ px: 3 }} colSpan={4}>
-                Trnx Hash ID
+              <TableCell sx={{ px: 15 }} colSpan={4}>
+                Trnx Hash
               </TableCell>
-              <TableCell sx={{ px: 0 }} colSpan={2}>
+              <TableCell sx={{ px: 3 }} colSpan={2}>
                 Amount
               </TableCell>
               <TableCell sx={{ px: 0 }} colSpan={2}>
@@ -98,32 +169,27 @@ const {transactions} = useAuth();
               <TableCell sx={{ px: 0 }} colSpan={1}>
                 Add Note
               </TableCell>
-            </TableRow>
+            </TableRow> 
           </TableHead>
 
-          {/* <TableBody>
-            {transactions.map((t, index) => (
-              <TableRow key={index} hover>
+          <TableBody>
+            {user.transac?.map(transac => (
+              <TableRow key={transac.id} hover>
                 <TableCell colSpan={4} align="left" sx={{ px: 0, textTransform: 'capitalize' }}>
                   <Box display="flex" alignItems="center">
-                    <Paragraph sx={{ m: 0, ml: 4 }}>{t.hash_id}</Paragraph>
+                    <Paragraph sx={{ m: 0, ml: 4 }}>{transac.hash_id + transac.timestamp}</Paragraph>
                   </Box>
                 </TableCell>
 
-                <TableCell align="left" colSpan={2} sx={{ px: 0, textTransform: 'capitalize' }}>
-                  ${t.amount > 999 ? (t.amount / 1000).toFixed(1) + 'k' : t.amount}
+                <TableCell align="left" colSpan={2} sx={{ px: 4, textTransform: 'capitalize' }}>
+                  ${transac.amount > 999 ? (transac.amount / 1000).toFixed(1) + 'k' : transac.amount}
                 </TableCell>
 
                 <TableCell sx={{ px: 0 }} align="left" colSpan={2}>
-                  {t.type ? (
-                    t.type = 'Deposit' ? (
-                      <Small bgcolor={bgSecondary}>Deposit</Small>
-                    ) : (
-                      <Small bgcolor={bgPrimary}>Withdrawl</Small>
-                    )
-                  ) : (
-                    <Small bgcolor={bgError}>Transfer</Small>
-                  )}
+                  {
+				  transac.type === 'Deposit' ? ( <Small bgcolor={bgSecondary}>Deposit</Small>) : 
+				  ( <Small bgcolor={bgError}>Withdrawal</Small> )
+				  }
                 </TableCell>
 
                 <TableCell sx={{ px: 0 }} colSpan={1}>
@@ -133,12 +199,13 @@ const {transactions} = useAuth();
                 </TableCell>
               </TableRow>
             ))}
-          </TableBody> */}
+          </TableBody>
         </ProductTable>
       </Box>
     </Card>
   );
 };
+
 
 
 

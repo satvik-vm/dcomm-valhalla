@@ -100,12 +100,12 @@ const reducer = (state, action) => {
         }
 
         case 'TRANSACTIONS': {
-            const {transactions} = action.payload
+            const {user} = action.payload
 
             return {
                 ...state,
                 isAuthenticated: true,
-                transactions,
+                user,
             }
         }
 
@@ -228,14 +228,20 @@ export const AuthProvider = ({ children }) => {
             userCredentials,
         })
 
-        const {transactions} = response.data;
-        console.log("transactions from AuthContext " + transactions);
+        const {accessToken, user} = response.data;
+
+        console.log("response from back end: ")
+
+        console.log(response)
+
+        setSession(accessToken)
+
 
         dispatch({
             type: 'TRANSACTIONS',
             payload:{
-                transactions,
-            }
+                user,
+            },
 
         })
     }

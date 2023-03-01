@@ -212,10 +212,15 @@ exports.get_transactions = async(req, res, next) => {
   	const trans = doc.transaction;
 
 	res.status(201).json({
-    // user: {
-    //   transactions: trans,
-    // }
-	transactions: trans,
+    accessToken: 201, 
+		user: {
+			//balance: mss.balance,
+			//id: account_number,
+			//amount: amount,
+			//hash: mss.hash,
+			transac: trans,
+			type: 'Transactions',
+		}
   });
 }
 
