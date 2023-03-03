@@ -1,6 +1,9 @@
-import { StaticDateRangePicker, DatePicker } from "@mui/lab";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import {
   Button,
   Checkbox,
@@ -8,6 +11,7 @@ import {
   Grid,
   styled,
   Box,
+  Stack
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
@@ -76,16 +80,16 @@ const TimeForm= () => {
             />
 
             <TextField
-              type="email"
-              name="ifscode"
-              label="IFSCode"
-              value={ifscode || ""}
+              type="text"
+              name="accountid"
+              label="Wallet ID"
+              value={accountid || ""}
               onChange={handleChange}
               validators={["required", "isEmail"]}
               errorMessages={["this field is required", "email is not valid"]}
             />
 
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
+            {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
             <StaticDateRangePicker
                 displayStaticWrapperAs="desktop"
                 value={date}
@@ -98,22 +102,16 @@ const TimeForm= () => {
                 </React.Fragment>
                 )}
             />
-            </LocalizationProvider>
+            </LocalizationProvider> */}
 
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DatePicker
-                value={date}
+            {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DateTimePicker
+                label="Date&Time picker"
+                value={state}
                 onChange={handleDateChange}
-                renderInput={(props) => (
-                  <TextField
-                    {...props}
-                    label="Date picker"
-                    id="mui-pickers-date"
-                    sx={{ mb: 2, width: "100%" }}
-                  />
-                )}
-              />
-            </LocalizationProvider>
+                renderInput={(params) => <TextField {...params} />}
+                />
+            </LocalizationProvider> */}
           </Grid>
 
           

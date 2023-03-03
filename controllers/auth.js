@@ -12,6 +12,8 @@ const qrcode = require("qrcode");
 const path = require("path");
 const fs = require("fs");
 
+var user_init;
+
 exports.signup_function = async (req, res) => {
     const {_name, phone_number, email, password, pincode, age} = req.body.userCredentials;
     console.log(req.body);
@@ -93,22 +95,28 @@ exports.login_function = async (req, res, next) => {
             return next(new ErrResponse("Invalid Credentials", 401));
         }
 
-		const balance = await getbalance.main(account_number);
-		console.log(balance);
+      const balance = await getbalance.main(account_number);
+      console.log(balance);
 
-        res.status(201).json({
-            accessToken: 201,
-            user: {
-              id: user.account_number,
-              avatar: user.avatar,
-              email: user.email,
-              name: user._name,
-              role: user.role,
-              balance: balance,
-            }
+      user_init = {
+        name: user._name,
+        balance: balance,
+        avatar: user.avatar,
+      }
+
+      res.status(201).json({
+        accessToken: 201,
+          user: {
+            id: user.account_number,
+            avatar: user.avatar,
+            email: user.email,
+            name: user._name,
+            role: user.role,
+            balance: balance,
+          }
         });
-    }   catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+      }   catch (error) {
+          res.status(500).json({ success: false, error: error.message });
     }
 };
 
@@ -118,7 +126,7 @@ exports.deposit_function = async (req, res, next) => {
 	var today = new Date();
 
 	const mss = await deposit.main(account_number, amount);
-  	console.log(mss);
+  console.log(mss);
 
 	var DD = String(today.getDate()).padStart(2, '0');
 	var MM = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -135,14 +143,19 @@ exports.deposit_function = async (req, res, next) => {
 
 	await doc.save();
 
+  user_init.balance = mss.balance;
+
 	res.status(201).json({
 		accessToken: 201,
 		user: {
+      name: user_init.name,
+      avatar: user_init.avatar,
 			balance: mss.balance,
 			id: account_number,
 			amount: amount,
 			hash: mss.hash,
 			date: today,
+      transac: doc.transaction,
 			type: 'Deposit',
 		}
 	})
@@ -174,14 +187,19 @@ exports.withdrawl_function = async (req, res, next) => {
 
 	await doc.save();
 
+  user_init.balance = mss.balance;
+
 	res.status(201).json({
 		accessToken: 201, 
 		user: {
+      name: user_init.name,
+      avatar: user_init.avatar,
 			balance: mss.balance,
 			id: account_number,
 			amount: amount,
 			hash: mss.hash,
 			date: today,
+      transac: doc.transaction,
 			type: 'Withdrawl',
 		}
 	})
@@ -214,10 +232,9 @@ exports.get_transactions = async(req, res, next) => {
 	res.status(201).json({
     accessToken: 201, 
 		user: {
-			//balance: mss.balance,
-			//id: account_number,
-			//amount: amount,
-			//hash: mss.hash,
+      name: user_init.name,
+      avatar: user_init.avatar,
+      balance: user_init.balance,
 			transac: trans,
 			type: 'Transactions',
 		}

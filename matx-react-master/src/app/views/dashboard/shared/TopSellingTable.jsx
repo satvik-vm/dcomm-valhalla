@@ -157,46 +157,46 @@ const handleClick = (event) => {
         <ProductTable>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ px: 15 }} colSpan={4}>
+              <TableCell sx={{ px: 17 }} colSpan={4}>
                 Trnx Hash
               </TableCell>
-              <TableCell sx={{ px: 3 }} colSpan={2}>
+              <TableCell sx={{ px: 3 }} colSpan={1}>
                 Amount
               </TableCell>
-              <TableCell sx={{ px: 0 }} colSpan={2}>
+              <TableCell sx={{ px: 0 }} colSpan={1}>
                 Action Type
               </TableCell>
-              <TableCell sx={{ px: 0 }} colSpan={1}>
-                Add Note
+              <TableCell sx={{ px: 17 }} colSpan={4}>
+                TimeStamp
               </TableCell>
             </TableRow> 
           </TableHead>
 
           <TableBody>
-            {user.transac?.map(transac => (
+            {user.transac?.reverse().slice(0, 5).map(transac => (
               <TableRow key={transac.id} hover>
                 <TableCell colSpan={4} align="left" sx={{ px: 0, textTransform: 'capitalize' }}>
                   <Box display="flex" alignItems="center">
-                    <Paragraph sx={{ m: 0, ml: 4 }}>{transac.hash_id + transac.timestamp}</Paragraph>
+                    <Paragraph sx={{ m: 0, ml: 4 }}>{transac.hash_id}</Paragraph>
                   </Box>
                 </TableCell>
 
-                <TableCell align="left" colSpan={2} sx={{ px: 4, textTransform: 'capitalize' }}>
+                <TableCell align="left" colSpan={1} sx={{ px: 4, textTransform: 'capitalize' }}>
                   ${transac.amount > 999 ? (transac.amount / 1000).toFixed(1) + 'k' : transac.amount}
                 </TableCell>
 
-                <TableCell sx={{ px: 0 }} align="left" colSpan={2}>
+                <TableCell sx={{ px: 0 }} align="left" colSpan={1}>
                   {
 				  transac.type === 'Deposit' ? ( <Small bgcolor={bgSecondary}>Deposit</Small>) : 
 				  ( <Small bgcolor={bgError}>Withdrawal</Small> )
-				  }
+				          }
                 </TableCell>
-
-                <TableCell sx={{ px: 0 }} colSpan={1}>
-                  <IconButton>
-                    <Icon color="primary">edit</Icon>
-                  </IconButton>
+                <TableCell colSpan={4} align="left" sx={{ px: 0, textTransform: 'capitalize' }}>
+                  <Box display="flex" alignItems="center">
+                    <Paragraph sx={{ m: 0, ml: 4 }}>{transac.timestamp}</Paragraph>
+                  </Box>
                 </TableCell>
+                
               </TableRow>
             ))}
           </TableBody>

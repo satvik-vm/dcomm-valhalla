@@ -133,7 +133,7 @@ const SimpleForm= () => {
               type="text"
               name="mobile"
               value={mobile || ""}
-              label="Mobile Nubmer"
+              label="Mobile Number"
               onChange={handleChange}
               validators={["required"]}
               errorMessages={["this field is required"]}
