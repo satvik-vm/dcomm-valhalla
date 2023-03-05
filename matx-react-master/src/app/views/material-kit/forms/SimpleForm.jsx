@@ -11,7 +11,6 @@ import {
   RadioGroup,
   styled,
 } from "@mui/material";
-import { Span } from "app/components/Typography";
 import { useEffect, useState } from "react";
 import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
 
@@ -20,7 +19,7 @@ const TextField = styled(TextValidator)(() => ({
   marginBottom: "16px",
 }));
 
-const SimpleForm = () => {
+const SimpleForm= () => {
   const [state, setState] = useState({ date: new Date() });
 
   useEffect(() => {
@@ -58,6 +57,7 @@ const SimpleForm = () => {
 
   return (
     <div>
+    This requires you to fill up the fields that helps us identify your project as a genuine one and which will help people contributing to your project get in contact with you. The personal details can be hidden from public view. This also ensures that the money raised is directed to your account linked to the chain only without passing by any third-parties.
       <ValidatorForm onSubmit={handleSubmit} onError={() => null}>
         <Grid container spacing={6}>
           <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
@@ -68,7 +68,7 @@ const SimpleForm = () => {
               value={username || ""}
               onChange={handleChange}
               errorMessages={["this field is required"]}
-              label="Username (Min length 4, Max length 9)"
+              label="Project Name"
               validators={["required", "minStringLength: 4", "maxStringLength: 9"]}
             />
 
@@ -76,6 +76,15 @@ const SimpleForm = () => {
               type="text"
               name="firstName"
               label="First Name"
+              onChange={handleChange}
+              value={firstName || ""}
+              validators={["required"]}
+              errorMessages={["this field is required"]}
+            />
+            <TextField
+              type="text"
+              name="firstName"
+              label="Last Name"
               onChange={handleChange}
               value={firstName || ""}
               validators={["required"]}
@@ -124,7 +133,7 @@ const SimpleForm = () => {
               type="text"
               name="mobile"
               value={mobile || ""}
-              label="Mobile Nubmer"
+              label="Mobile Number"
               onChange={handleChange}
               validators={["required"]}
               errorMessages={["this field is required"]}
@@ -184,12 +193,12 @@ const SimpleForm = () => {
         </Grid>
 
         <Button color="primary" variant="contained" type="submit">
-          <Icon>send</Icon>
-          <Span sx={{ pl: 1, textTransform: "capitalize" }}>Submit</Span>
+          {/* <Icon>send</Icon> */}
+          {/* <Span sx={{ pl: 1, textTransform: "capitalize" }}>Save</Span> */}
+          Save
         </Button>
       </ValidatorForm>
     </div>
   );
 };
-
 export default SimpleForm;

@@ -6,7 +6,7 @@
 // global scope, and execute the script.
 const hre = require("hardhat");
 
-exports.main = async() => {
+exports.main = async ()=>{
   const account = await hre.ethers.getContractFactory("account");
   // console.log(1);
   const acc = await account.deploy({value: 0});

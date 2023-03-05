@@ -17,17 +17,19 @@ const AppForm = () => {
   return (
     <Container>
       <Box className="breadcrumb">
-        <Breadcrumb routeSegments={[{ name: "Material", path: "/material" }, { name: "Form" }]} />
+        <Breadcrumb routeSegments={[{ name: "CrowdFunds", path: "/material" }, { name: "Create" }]} />
       </Box>
 
       <Stack spacing={3}>
-        <SimpleCard title="Simple Form">
-          <SimpleForm />
+        <SimpleCard title="Create">
+          <StepperForm />
+          {/* <br></br>
+          <SimpleForm /> */}
         </SimpleCard>
 
-        <SimpleCard title="stepper form">
+        {/* <SimpleCard title="stepper form">
           <StepperForm />
-        </SimpleCard>
+        </SimpleCard> */}
       </Stack>
     </Container>
   );

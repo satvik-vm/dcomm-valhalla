@@ -1,6 +1,7 @@
 // const login = require("../models/login");
 const signup = require("../models/signup");
 const account = require("../models/accounts");
+const transactions = require("../models/transactions");
 const deploy = require("../scripts/deploy");
 const deposit = require("../scripts/deposit");
 const withdraw = require("../scripts/withdrawl");
@@ -10,6 +11,8 @@ const nodemailer = require("nodemailer");
 const qrcode = require("qrcode");
 const path = require("path");
 const fs = require("fs");
+
+var user_init;
 
 exports.signup_function = async (req, res) => {
     const {_name, phone_number, email, password, pincode, age} = req.body.userCredentials;
@@ -35,12 +38,25 @@ exports.signup_function = async (req, res) => {
             age,
             role
         });
+
+		const hash_id = "0x00000";
+		const amount = 500;
+		const timestamp = new Date().toString();
+		const type = 'Deposit';
+
         const main_account = account_number;
         const account_created = await account.create({
-            main_account,
+			main_account,
         });
+
+		const transaction_instance = await transactions.create({
+			account_number,
+			transaction:[{hash_id: hash_id, amount: amount, timestamp: timestamp, type: type}],
+		});
+
         console.log(signed_up);
         console.log(account_created);
+		    console.log(transaction_instance);
         res.status(201).json({
             ok: true,
             signed_up: signed_up,
@@ -79,22 +95,28 @@ exports.login_function = async (req, res, next) => {
             return next(new ErrResponse("Invalid Credentials", 401));
         }
 
-		const balance = await getbalance.main(account_number);
-		console.log(balance);
+      const balance = await getbalance.main(account_number);
+      console.log(balance);
 
-        res.status(201).json({
-            accessToken: 201,
-            user: {
-              id: user.account_number,
-              avatar: user.avatar,
-              email: user.email,
-              name: user._name,
-              role: user.role,
-			        balance: balance,
-            }
+      user_init = {
+        name: user._name,
+        balance: balance,
+        avatar: user.avatar,
+      }
+
+      res.status(201).json({
+        accessToken: 201,
+          user: {
+            id: user.account_number,
+            avatar: user.avatar,
+            email: user.email,
+            name: user._name,
+            role: user.role,
+            balance: balance,
+          }
         });
-    }   catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+      }   catch (error) {
+          res.status(500).json({ success: false, error: error.message });
     }
 };
 
@@ -114,14 +136,27 @@ exports.deposit_function = async (req, res, next) => {
 	var ss = today.getSeconds();
 	today = YYYY + " " + MM + " " + DD + " " + hh + " " + " " + mm + " " + ss;
 
+	const date = new Date().toString();
+	const doc = await transactions.findOne({account_number: account_number});
+	
+	doc.transaction.push({hash_id: mss.hash, amount: amount, timestamp: date, type: 'Deposit'});
+
+	await doc.save();
+
+  user_init.balance = mss.balance;
+
 	res.status(201).json({
 		accessToken: 201,
 		user: {
+      name: user_init.name,
+      avatar: user_init.avatar,
 			balance: mss.balance,
 			id: account_number,
 			amount: amount,
 			hash: mss.hash,
 			date: today,
+      transac: doc.transaction,
+			type: 'Deposit',
 		}
 	})
 };
@@ -135,7 +170,7 @@ exports.withdrawl_function = async (req, res, next) => {
 	console.log(req.body);
 
 	const mss = await withdraw.main(account_number, amount);
-  console.log(mss);
+  	console.log(mss);
 
 	var DD = String(today.getDate()).padStart(2, '0');
 	var MM = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -145,14 +180,27 @@ exports.withdrawl_function = async (req, res, next) => {
 	var ss = today.getSeconds();
 	today = YYYY + " " + MM + " " + DD + " " + hh + " " + " " + mm + " " + ss;
 
+	const date = new Date().toString();
+	const doc = await transactions.findOne({account_number: account_number});
+	
+	doc.transaction.push({hash_id: mss.hash, amount: amount, timestamp: date, type: 'Withdrawl'});
+
+	await doc.save();
+
+  user_init.balance = mss.balance;
+
 	res.status(201).json({
 		accessToken: 201, 
 		user: {
+      name: user_init.name,
+      avatar: user_init.avatar,
 			balance: mss.balance,
 			id: account_number,
 			amount: amount,
 			hash: mss.hash,
 			date: today,
+      transac: doc.transaction,
+			type: 'Withdrawl',
 		}
 	})
 };
@@ -170,6 +218,27 @@ exports.get_balance_function = async(res, req, next) => {
 		balance: balance,
 		account_number: account_number,
 	})
+};
+
+exports.get_transactions = async(req, res, next) => {
+	const {account_number} = req.body.userCredentials;
+
+	const doc = await transactions.findOne({account_number: account_number});
+
+	console.log("transaction: " + doc.transaction);
+
+  	const trans = doc.transaction;
+
+	res.status(201).json({
+    accessToken: 201, 
+		user: {
+      name: user_init.name,
+      avatar: user_init.avatar,
+      balance: user_init.balance,
+			transac: trans,
+			type: 'Transactions',
+		}
+  });
 }
 
 function createqr (account_number){
@@ -184,13 +253,13 @@ function sendMail(account_number, email) {
     var transporter = nodemailer.createTransport({
       service: "outlook",
       auth: {
-        user: "rahulsharma.1425@outlook.com",
+        user: "rahulsharma1425@outlook.com",
         pass: "RahulSharma",
       },
     });
 
     var mailOptions = {
-      from: "rahulsharma.1425@outlook.com",
+      from: "rahulsharma1425@outlook.com",
       to: email,
       subject: "Your User ID",
       text: "Show the QR code to where ever account number is required.\nYour Account number is " + account_number,
@@ -219,4 +288,4 @@ function sendMail(account_number, email) {
         }
       }
     });
-  }
+}

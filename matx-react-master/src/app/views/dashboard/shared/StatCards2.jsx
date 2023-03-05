@@ -64,7 +64,7 @@ const StatCards2 = () => {
             <IconBox sx={{ background: 'rgba(9, 182, 109, 0.15)' }}>
               <Icon className="icon">expand_less</Icon>
             </IconBox>
-            <Span textcolor={'#08ad6c'}>(+20%)</Span>
+            <Span textcolor={'#08ad6c'}>(+{(user.balance-500)/5}%)</Span>
           </ContentBox>
         </Card>
       </Grid>
@@ -83,7 +83,7 @@ const StatCards2 = () => {
             <IconBox sx={{ background: bgError }}>
               <Icon className="icon">expand_less</Icon>
             </IconBox>
-            <Span textcolor={textError}>(+0%)</Span>
+            <Span textcolor={textError}>(+%)</Span>
           </ContentBox>
         </Card>
       </Grid>

@@ -1,6 +1,6 @@
 import {
-  Avatar,
   Box,
+  Button,
   Card,
   Icon,
   IconButton,
@@ -15,6 +15,10 @@ import {
   useTheme,
 } from '@mui/material';
 import { Paragraph } from 'app/components/Typography';
+import useAuth from 'app/hooks/useAuth';
+import { findIndex } from 'lodash';
+import React, { useState, useEffect } from 'react';
+
 
 const CardHeader = styled(Box)(() => ({
   display: 'flex',
@@ -61,10 +65,88 @@ const TopSellingTable = () => {
   const bgPrimary = palette.primary.main;
   const bgSecondary = palette.secondary.main;
 
+  const productList = [
+    {
+      imgUrl: '/assets/images/products/headphone-2.jpg',
+      name: 'earphone',
+      price: 100,
+      available: 15,
+    },
+    {
+      imgUrl: '/assets/images/products/headphone-3.jpg',
+      name: 'earphone',
+      price: 1500,
+      available: 30,
+    },
+    {
+      imgUrl: '/assets/images/products/iphone-2.jpg',
+      name: 'iPhone x',
+      price: 1900,
+      available: 35,
+    },
+    {
+      imgUrl: '/assets/images/products/iphone-1.jpg',
+      name: 'iPhone x',
+      price: 100,
+      available: 0,
+    },
+    {
+      imgUrl: '/assets/images/products/headphone-3.jpg',
+      name: 'Head phone',
+      price: 1190,
+      available: 5,
+    },
+  ];
+  
+
+  // const [transaction_arr, setTransactions] = useState([user.transactions])
+  
+  // useEffect(() => {
+	  //   setTransactions(user)
+	  // }, [user]);
+	  
+	  
+	  // console.log("Button Clicked")
+const {user, transactions} = useAuth(); 
+const handleClick = (event) => {
+		  
+  try{
+    // call_trans();
+	transactions();
+  }catch (e) {
+    console.log(e);
+  }
+
+  console.log("User called from TopSellingTable ")
+  console.log(user.transac)
+  console.log(productList)
+  // console.log(transaction_arr);
+  // setTransactions(transaction_arr) ;
+};
+
+
+// const transaction_arr = Object.values(user.transactions)
+// const [tran, setTransactions] = useState([transactions, ]);
+
+
+
+// const productList = transactions;
   return (
     <Card elevation={3} sx={{ pt: '20px', mb: 3 }}>
       <CardHeader>
         <Title>Transaction History</Title>
+
+        <Button
+          size="small"
+          color="primary"
+          variant="contained"
+          sx={{ textTransform: 'uppercase' }}
+          onClick = {(event) => {handleClick(event);}}
+          id="deposit_btn"
+        >
+          Update <Icon>forward</Icon>
+        </Button>
+        
         <Select size="small" defaultValue="this_month">
           <MenuItem value="this_month">This Month</MenuItem>
           <MenuItem value="last_month">Last Month</MenuItem>
@@ -75,51 +157,46 @@ const TopSellingTable = () => {
         <ProductTable>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ px: 3 }} colSpan={4}>
-                Trnx Hash ID
+              <TableCell sx={{ px: 17 }} colSpan={4}>
+                Trnx Hash
               </TableCell>
-              <TableCell sx={{ px: 0 }} colSpan={2}>
+              <TableCell sx={{ px: 3 }} colSpan={1}>
                 Amount
               </TableCell>
-              <TableCell sx={{ px: 0 }} colSpan={2}>
+              <TableCell sx={{ px: 0 }} colSpan={1}>
                 Action Type
               </TableCell>
-              <TableCell sx={{ px: 0 }} colSpan={1}>
-                Add Note
+              <TableCell sx={{ px: 17 }} colSpan={4}>
+                TimeStamp
               </TableCell>
-            </TableRow>
+            </TableRow> 
           </TableHead>
 
           <TableBody>
-            {productList.map((product, index) => (
-              <TableRow key={index} hover>
+            {user.transac?.reverse().slice(0, 5).map(transac => (
+              <TableRow key={transac.id} hover>
                 <TableCell colSpan={4} align="left" sx={{ px: 0, textTransform: 'capitalize' }}>
                   <Box display="flex" alignItems="center">
-                    <Paragraph sx={{ m: 0, ml: 4 }}>{product.name}</Paragraph>
+                    <Paragraph sx={{ m: 0, ml: 4 }}>{transac.hash_id}</Paragraph>
                   </Box>
                 </TableCell>
 
-                <TableCell align="left" colSpan={2} sx={{ px: 0, textTransform: 'capitalize' }}>
-                  ${product.price > 999 ? (product.price / 1000).toFixed(1) + 'k' : product.price}
+                <TableCell align="left" colSpan={1} sx={{ px: 4, textTransform: 'capitalize' }}>
+                  ${transac.amount > 999 ? (transac.amount / 1000).toFixed(1) + 'k' : transac.amount}
                 </TableCell>
 
-                <TableCell sx={{ px: 0 }} align="left" colSpan={2}>
-                  {product.available ? (
-                    product.available < 20 ? (
-                      <Small bgcolor={bgSecondary}>Deposit</Small>
-                    ) : (
-                      <Small bgcolor={bgPrimary}>Withdrawl</Small>
-                    )
-                  ) : (
-                    <Small bgcolor={bgError}>Transfer</Small>
-                  )}
+                <TableCell sx={{ px: 0 }} align="left" colSpan={1}>
+                  {
+				  transac.type === 'Deposit' ? ( <Small bgcolor={bgSecondary}>Deposit</Small>) : 
+				  ( <Small bgcolor={bgError}>Withdrawal</Small> )
+				          }
                 </TableCell>
-
-                <TableCell sx={{ px: 0 }} colSpan={1}>
-                  <IconButton>
-                    <Icon color="primary">edit</Icon>
-                  </IconButton>
+                <TableCell colSpan={4} align="left" sx={{ px: 0, textTransform: 'capitalize' }}>
+                  <Box display="flex" alignItems="center">
+                    <Paragraph sx={{ m: 0, ml: 4 }}>{transac.timestamp}</Paragraph>
+                  </Box>
                 </TableCell>
+                
               </TableRow>
             ))}
           </TableBody>
@@ -129,32 +206,7 @@ const TopSellingTable = () => {
   );
 };
 
-const productList = [
-  {
-    name: '0x3d6f73d466c79b3d7a3f1e4e71cdb22caf499960e97fc1c08453a1d432f2b226',
-    price: 100,
-    available: 15,
-  },
-  {
-    name: '0x94eb0f1d8af90491251eb47eee7a197881045a6652761239b02b7c56f16e0b8d',
-    price: 1500,
-    available: 30,
-  },
-  {
-    name: '0x94eb0f1d8af90491251eb47eee7a197881045a6652761239b02b7c56f16e0b8d',
-    price: 1900,
-    available: 35,
-  },
-  {
-    name: '0x0740af9e5cae2b1d1c5e76b8d99d79d18ff713340c1484089c4b004408980f34',
-    price: 100,
-    available: 0,
-  },
-  {
-    name: '0x1fe270484f47599b56ac8036d8b27592c73bdf145a96a534c6b569d1c13d06ff',
-    price: 1190,
-    available: 5,
-  },
-];
+
+
 
 export default TopSellingTable;
