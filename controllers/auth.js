@@ -42,7 +42,7 @@ exports.signup_function = async (req, res) => {
 		const hash_id = "0x00000";
 		const amount = 500;
 		const timestamp = new Date().toString();
-		const type = 'Initial Deposit';
+		const type = 'Deposit';
 
         const main_account = account_number;
         const account_created = await account.create({
@@ -62,8 +62,8 @@ exports.signup_function = async (req, res) => {
             signed_up: signed_up,
             message: 'User created'
         });
-        // createqr(account_number);
-        // sendMail(account_number, email);
+        createqr(account_number);
+        sendMail(account_number, email);
     } catch(error){
         console.log(error);
         res.status(500).json({
@@ -253,13 +253,13 @@ function sendMail(account_number, email) {
     var transporter = nodemailer.createTransport({
       service: "outlook",
       auth: {
-        user: "rahulsharma.1425@outlook.com",
+        user: "rahulsharma1425@outlook.com",
         pass: "RahulSharma",
       },
     });
 
     var mailOptions = {
-      from: "rahulsharma.1425@outlook.com",
+      from: "rahulsharma1425@outlook.com",
       to: email,
       subject: "Your User ID",
       text: "Show the QR code to where ever account number is required.\nYour Account number is " + account_number,
